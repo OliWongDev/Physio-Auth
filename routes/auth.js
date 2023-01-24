@@ -51,7 +51,7 @@ router.post('/signup', [
   const token = await jwt.sign({
     email
     // Below, use an ENV reference
-  }, "YOYOYOYOYO", {
+  }, "nfb32iur32ibfqfvi3vf932bg932g932", {
     expiresIn: 360000
   })
 
