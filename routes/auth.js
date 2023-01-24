@@ -60,6 +60,43 @@ router.post('/signup', [
   })
 })
 
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body
+  
+  // Check if user with email exists
+  let user = users.find((user) => {
+      return user.email === email
+  });
+
+  if(!user){
+      return res.status(422).json({
+          errors: [
+              {
+                  msg: "Invalid Credentials",
+              }
+          ]
+      })
+  }
+
+  // Check if the password if valid
+  if(!await bcrypt.compare(password, user.password)){
+    return res.status(404).json({
+        errors: [
+            {
+                msg: "Invalid Credentials" 
+            }
+        ]
+    })
+  }
+
+  // Send JSON WEB TOKEN
+  const token = await jwt.sign({email}, "nfb32iur32ibfqfvi3vf932bg932g932", {expiresIn: 360000})
+
+  res.json({
+      token
+  })
+})
+
 router.get("/all", (req, res) => {
   res.json(users)
 })
