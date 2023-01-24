@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { check, validationResult } from 'express-validator'
 import { users } from "../db.js"
+import bcrypt from "bcrypt"
 
 const router = Router()
 
@@ -11,7 +12,7 @@ router.post('/signup', [
     .isLength({
       min: 6
     })
-], (req, res) => {
+], async (req, res) => {
   const { password, email } = req.body
 
   // VALIDATED THE INPUT
@@ -38,7 +39,18 @@ router.post('/signup', [
     })
   }
 
+  let HashedPassword = await bcrypt.hash(password, 10)
+
+  users.push({
+    email,
+    password: HashedPassword
+  })
+
   res.send("Validation Pass")
+})
+
+router.get("/all", (req, res) => {
+  res.json(users)
 })
 
 export default router
