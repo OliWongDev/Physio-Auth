@@ -1,7 +1,11 @@
 import { Router } from 'express'
 const router = Router()
 
-router.get('/', (req, res) => {
+router.post('/signup', (req, res) => {
+  const { password, email } = req.body
+
+  console.log(password, email)
+
   res.send("Auth route working")
 })
 
